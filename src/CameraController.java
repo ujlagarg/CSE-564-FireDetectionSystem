@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class CameraController {
     Map<Integer, Integer[]> imageMap;
     public void CameraController(){
-        imageMap = new HashMap<Integer, Integer[]>();
+        imageMap = new HashMap<>();
     }
     public void startCameraController(){
 
@@ -13,7 +13,11 @@ public class CameraController {
     public void updateImageMap(Integer key, Integer[] image){
         if(image.length > 0)
             imageMap.put(key, image);
-        else
-            imageMap.putIfAbsent(key, null);
+        else{
+            if(imageMap.containsKey(key))
+                imageMap.replace(key, image);
+            else
+                imageMap.put(key, null);
+        }
     }
 }
