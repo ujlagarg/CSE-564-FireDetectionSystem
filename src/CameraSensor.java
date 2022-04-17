@@ -13,4 +13,11 @@ public class CameraSensor {
     public void setId(int Id){
         id = Id;
     }
+
+    public Integer[] getImage(){
+        Integer[] image = new Integer[100];
+        for(int i=0; i < image.length; i++)
+            image[i]  =  (int) (Math.random()*6) + 1;
+        return image;
+    }
 }

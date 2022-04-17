@@ -22,6 +22,14 @@ public class Main {
         }
 
         // initializing Primary Controller
-        PrimaryController controller = new PrimaryController();
+        PrimaryController controller = new PrimaryController(numberOfRooms);
+        CameraController cameraController = controller.getCameraController();
+        controller.setFireDetectorSignal(true); // for now has been hard coded. Will be taking this after computing values from Fire controller
+        while(true){
+            for(int i = 0; i< numberOfRooms; i++) {
+                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
+            }
+        }
+
     }
 }
