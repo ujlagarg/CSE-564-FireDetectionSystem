@@ -12,7 +12,7 @@ public class Main {
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
         ArrayList<TempDetectorSensor> tempSensors = new ArrayList<TempDetectorSensor>();
         ArrayList<CameraSensor> cameraSensors = new ArrayList<CameraSensor>();
-        ArrayList<LEDPanelSensor> ledPanelSensors = new ArrayList<LEDPanelSensor>();
+        ArrayList<LEDPanel> ledPanelSensors = new ArrayList<LEDPanel>();
         ArrayList<FireDetector> fireDetectors = new ArrayList<FireDetector>();
 
         for(int i = 0; i< numberOfRooms; i++) {
@@ -20,7 +20,7 @@ public class Main {
             tempSensors.add(new TempDetectorSensor(i));
             fireDetectors.add(new FireDetector(i));
             cameraSensors.add(new CameraSensor(i));
-            ledPanelSensors.add(new LEDPanelSensor(i));
+            ledPanelSensors.add(new LEDPanel(i));
         }
 
         // initializing Primary Controller
