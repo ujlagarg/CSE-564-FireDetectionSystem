@@ -1,16 +1,22 @@
 public class FireDetector {
     int id;
-    boolean fireDetected = true;
+    boolean value;
 
-    public FireDetector(int Id){
-        id = Id;
+    public FireDetector(int Id, SmokeDetectorSensor s, TempDetectorSensor t){
+       setId(Id);
+       if(s.getSmoke()>=0.14 || t.getTemperature()>=57)
+           setValue(true);
+       else
+           setValue(false);
     }
 
     public void setId(int Id){
         id = Id;
     }
-
-    public Boolean getFireDetectedBool(){
-        return fireDetected;
+    public void setValue(boolean value){
+        this.value=value;
+    }
+    public boolean getValue(){
+       return value;
     }
 }

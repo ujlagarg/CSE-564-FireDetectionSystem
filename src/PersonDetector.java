@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import constants.Constants;
+//import constants.Constants;
 
 public class PersonDetector {
     public Map<Integer, Integer> detectPeople(Map<Integer, Integer[]> imageMap) {
@@ -14,8 +14,8 @@ public class PersonDetector {
         for (Map.Entry<Integer, Integer[]> set : imageMap.entrySet()) {
             if (random.nextBoolean()) {
                 Integer roomId = set.getKey();
-                Integer max = Constants.ROOMS_MAX_OCCUPANCY.get(roomId);
-                peopleDetected.put(roomId, random.nextInt(max - min + 1) + min);
+                //Integer max = Constants.ROOMS_MAX_OCCUPANCY.get(roomId);
+                peopleDetected.put(roomId, random.nextInt(100 - min + 1) + min);
             } else {
                 peopleDetected.put(set.getKey(), 0);
             };
