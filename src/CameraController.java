@@ -2,12 +2,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class CameraController {
-    Map<Integer, Integer[]> imageMap;
-    public void CameraController(){
-        imageMap = new HashMap<>();
-    }
-    public void startCameraController(){
-
+    Map<Integer, Integer[]> imageMap = new HashMap<>();
+    public Map<Integer, Integer[]> getImageMap(){
+        return imageMap;
     }
 
     public void updateImageMap(Integer key, Integer[] image){
