@@ -29,7 +29,7 @@ public class Main {
         Map<Integer, Boolean> fireDetectedMap = new HashMap<>();
         while(true){
             for(int i = 0; i< numberOfRooms; i++) {
-                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
+                cameraController.updateImageMap(i, cameraSensors.get(i).getImage()); // thread one for getting images always
                 fireDetectedMap.put(i, fireDetectors.get(i).getFireDetectedBool());
             }
             if(fireDetectedMap.containsValue(true)) {
