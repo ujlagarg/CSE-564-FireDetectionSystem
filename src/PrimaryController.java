@@ -8,6 +8,13 @@ public class PrimaryController {
     Router router;
     LEDController ledController;
     Map<Integer, Boolean> fireMap;
+
+    public PrimaryController(){
+        cameraController = new CameraController();
+        personDetector = new PersonDetector();
+        router = new Router();
+        ledController = new LEDController();
+    }
     public PrimaryController(int numberOfRooms){
         noOfRooms = numberOfRooms;
         cameraController = new CameraController();
@@ -22,7 +29,8 @@ public class PrimaryController {
     }
 
     public void startFireEvacuationSystem(){
-        personDetector.detectPeople(cameraController.getImageMap());
+        System.out.println("Starting system");
+//        personDetector.detectPeople(cameraController.getImageMap());
     }
 
     public CameraController getCameraController(){
