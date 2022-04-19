@@ -1,9 +1,13 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class PrimaryController {
     int noOfRooms = 0;
     CameraController cameraController;
     PersonDetector personDetector;
     Router router;
     LEDController ledController;
+    Map<Integer, Boolean> fireMap;
     public PrimaryController(int numberOfRooms){
         noOfRooms = numberOfRooms;
         cameraController = new CameraController();
@@ -12,17 +16,13 @@ public class PrimaryController {
         ledController = new LEDController();
     }
 
-    public void setFireDetectorSignal(boolean value){
-        if(value == true)
+    public void setFireDetectorSignal(Map<Integer, Boolean> fireDetectedMap){
+            fireMap = fireDetectedMap;
             startFireEvacuationSystem();
     }
 
     public void startFireEvacuationSystem(){
-        startCameraControllerSystem();
-    }
-
-    public void startCameraControllerSystem(){
-        cameraController.startCameraController();
+        personDetector.detectPeople(cameraController.getImageMap());
     }
 
     public CameraController getCameraController(){
