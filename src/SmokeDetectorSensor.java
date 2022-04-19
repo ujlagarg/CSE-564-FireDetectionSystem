@@ -1,16 +1,18 @@
 public class SmokeDetectorSensor {
     int id;
-    String name = "";
+    double value;
 
     public SmokeDetectorSensor(int Id){
-        id = Id;
+    setId(Id);
+    setSmokeDensity(Math.random());
     }
-    public SmokeDetectorSensor(String nameVal){
-        id = (int) Math.random();
-        name = nameVal;
-    }
-
     public void setId(int Id){
-        id = Id;
+      this.id = Id;
+  }
+    public void setSmokeDensity(double smoke){value = smoke;}
+
+    public int getId(){ return id; }
+    public double getSmoke() {
+        return value;
     }
 }
