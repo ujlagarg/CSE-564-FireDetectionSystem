@@ -37,5 +37,18 @@ public class Main {
             }
         }
 
+        // For Testing Person Detector
+        // PersonDetector pd = new PersonDetector();
+        // Map<Integer, Integer[]> imageMap = new HashMap<Integer, Integer[]>();
+        // imageMap.put(1, new Integer[]{ 1,2,3,4,5,6,7,8,9,10 });
+        // imageMap.put(2, new Integer[]{ 1,2,3,4,5,7,8,9,10 });
+        // imageMap.put(3, new Integer[]{ 1,2,3,4,5,7,8,9,10 });
+        // imageMap.put(4, new Integer[]{ 1,2,3,6,7,8,9,10 });
+        // imageMap.put(5, new Integer[]{ 4,5,6,7,8,9,10 });
+        // imageMap.put(6, new Integer[]{ 3,4,5,6,7,8,9,10 });
+        // imageMap.put(7, new Integer[]{ 3,4,5,6,7,8,9,10 });
+        // System.out.print(pd.detectPeople(imageMap));
+
+
     }
 }
