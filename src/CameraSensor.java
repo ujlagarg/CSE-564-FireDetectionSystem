@@ -16,10 +16,10 @@ public class CameraSensor {
         id = Id;
     }
 
-    public ArrayList<Integer> getImage(){
-        ArrayList<Integer> image = new ArrayList<Integer>(100);
-        for(int i=0; i < image.size(); i++)
-            image.add((int) (Math.random()*6*i) + 1);
+    public Integer[] getImage(){
+        Integer[] image = new Integer[100];
+        for(int i=0; i < image.length; i++)
+            image[i] = (int) (Math.random()*6*i) + 1;
         return image;
     }
 }

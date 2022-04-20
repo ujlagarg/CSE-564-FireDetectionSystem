@@ -19,6 +19,9 @@ public class FireController {
     }
 
     public Map<Integer, Boolean> getFireDetectedMap() {
+        for (FireDetector fireDetector : fireDetectors) {
+            fireDetectedMap.put(fireDetector.getId(), fireDetector.getState());
+        }
         return fireDetectedMap;
     }
 

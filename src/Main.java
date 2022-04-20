@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over here.
         int numberOfRooms = 10;
@@ -53,10 +53,15 @@ public class Main {
         int smokeReading = Integer.parseInt(readings[1]);
         System.out.println(tempReading+" "+smokeReading);
 
+        fireDetectors.get(1).smokeDetectorSensor.setSmokeDensity(smokeReading);
+        fireDetectors.get(1).tempDetectorSensor.setTemperature(tempReading);
+        fireDetectors.get(1).setState();
+
         while (true) {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
 
             if (fireDetectedMap.containsValue(true)) {
+                System.out.println("in if condition, fire has value true");
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
 
@@ -64,6 +69,7 @@ public class Main {
              * Capture Images from Cameras
              */
             for (int i = 0; i < numberOfRooms; i++) {
+                System.out.println("Capturing images");
                 cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
             }
 
@@ -73,7 +79,8 @@ public class Main {
 
 
             /** Light Up LED */
-
+            Thread.sleep(3000);
+            System.out.println("sleeping");
         }
 
         // For Testing Person Detector

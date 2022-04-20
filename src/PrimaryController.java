@@ -24,12 +24,11 @@ public class PrimaryController {
 
     public void startFireEvacuationSystem(){
         System.out.println("Starting system");
-//        personDetector.detectPeople(cameraController.getImageMap());
+        personDetector.detectPeople(cameraController.getImageMap());
     }
 
     public void stopFireEvacuationSystem(){
         System.out.println("Stopping system");
-//        personDetector.detectPeople(cameraController.getImageMap());
     }
 
     public CameraController getCameraController(){
