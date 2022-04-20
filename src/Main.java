@@ -23,13 +23,6 @@ public class Main {
         roomGraph.put(0, new ArrayList<Integer>(Arrays.asList(9)));
         System.out.println(roomGraph);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter temperature and smoke reading for any 1 room seperated by comma(,):");
-        String[] readings = reader.readLine().split(",");
-        int tempReading = Integer.parseInt(readings[0]);
-        int smokeReading = Integer.parseInt(readings[1]);
-        System.out.println(tempReading+" "+smokeReading);
-
         // initializing Sensors and detectors
 
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
@@ -53,6 +46,12 @@ public class Main {
         /**
          * Start a fire somewhere before calling while
          */
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter temperature and smoke reading for any 1 room seperated by comma(,):");
+        String[] readings = reader.readLine().split(",");
+        int tempReading = Integer.parseInt(readings[0]);
+        int smokeReading = Integer.parseInt(readings[1]);
+        System.out.println(tempReading+" "+smokeReading);
 
         while (true) {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
