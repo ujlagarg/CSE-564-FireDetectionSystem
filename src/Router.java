@@ -54,7 +54,7 @@ public class Router {
         }
 
         /* Calculate the shortest paths for each room */
-        Double[] dist = Dijkstras();
+        Double[] dist = Dijkstras(fires);
         Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
         for(Integer room: containsPeople){
             paths.add(GetPathToExit(dist, room));
@@ -74,7 +74,7 @@ public class Router {
         return edges;
     }
 
-    private Double[] Dijkstras() {
+    private Double[] Dijkstras(Map<Integer, Boolean> fires) {
         /* Set all values to infinity */
         Double[] dist = new Double[this.graph.size()];
         for(int j = 0; j < this.graph.size(); j++) {
@@ -99,6 +99,11 @@ public class Router {
             for(Map.Entry<Integer, Double> node : this.graph.get(current).entrySet()) {
                 next_dist = dist[current] + node.getValue();
                 nextNode = node.getKey();
+                if(fires.containsKey(node.getKey())){
+                    if(fires.get(node.getKey())){
+                        continue;
+                    }
+                }
                 if(next_dist < dist[nextNode])
                     dist[nextNode] = next_dist;
                 if(!visited.contains(nextNode))

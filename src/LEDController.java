@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 public class LEDController {
     Map<Integer, Boolean> paths = new HashMap<Integer, Boolean>();
@@ -9,7 +8,7 @@ public class LEDController {
 
     }
 
-    public void updateLedPaths(Vector<Vector<Integer>> ledPaths) {
+    public void updateLedPaths(HashMap<Integer, Boolean> ledPaths) {
         for (Map.Entry<Integer, Boolean> set : ledPaths.entrySet()) {
             paths.put(set.getKey(), set.getValue());
         }
