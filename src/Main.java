@@ -1,16 +1,35 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over here.
         int numberOfRooms = 10;
-        // initializing Sensors and detectors
+        HashMap<Integer, ArrayList<Integer>> roomGraph = new HashMap<Integer, ArrayList<Integer>>(10);
+        roomGraph.put(1, new ArrayList<Integer>(Arrays.asList(2,3,8)));
+        roomGraph.put(2, new ArrayList<Integer>(Arrays.asList(1,4,5,7,9)));
+        roomGraph.put(3, new ArrayList<Integer>(Arrays.asList(1,4,5,9)));
+        roomGraph.put(4, new ArrayList<Integer>(Arrays.asList(2,3,6,8)));
+        roomGraph.put(5, new ArrayList<Integer>(Arrays.asList(2,3,9)));
+        roomGraph.put(6, new ArrayList<Integer>(Arrays.asList(4,7,8)));
+        roomGraph.put(7, new ArrayList<Integer>(Arrays.asList(2,6)));
+        roomGraph.put(8, new ArrayList<Integer>(Arrays.asList(1,4,6)));
+        roomGraph.put(9, new ArrayList<Integer>(Arrays.asList(2,3,5,10)));
+        roomGraph.put(0, new ArrayList<Integer>(Arrays.asList(9)));
+        System.out.println(roomGraph);
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter temperature and smoke reading for any 1 room seperated by comma(,):");
+        String[] readings = reader.readLine().split(",");
+        int tempReading = Integer.parseInt(readings[0]);
+        int smokeReading = Integer.parseInt(readings[1]);
+        System.out.println(tempReading+" "+smokeReading);
+
+        // initializing Sensors and detectors
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
         ArrayList<TempDetectorSensor> tempSensors = new ArrayList<TempDetectorSensor>();
         ArrayList<CameraSensor> cameraSensors = new ArrayList<CameraSensor>();
@@ -30,7 +49,7 @@ public class Main {
         FireController fireController = new FireController();
         Map<Integer, Boolean> fireDetectedMap = new HashMap();
 
-       while(true){
+       while(fireDetectedMap.containsValue(true)){
             for(int i = 0; i< numberOfRooms; i++) {
                 cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
                 fireDetectedMap.put(i, fireDetectors.get(i).getValue());

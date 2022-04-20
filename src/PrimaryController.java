@@ -9,12 +9,6 @@ public class PrimaryController {
     LEDController ledController;
     Map<Integer, Boolean> fireMap;
 
-    public PrimaryController(){
-        cameraController = new CameraController();
-        personDetector = new PersonDetector();
-        router = new Router();
-        ledController = new LEDController();
-    }
     public PrimaryController(int numberOfRooms){
         noOfRooms = numberOfRooms;
         cameraController = new CameraController();
