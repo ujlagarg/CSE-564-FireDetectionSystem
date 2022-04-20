@@ -14,6 +14,8 @@ public class Constants {
         ROOMS_MAX_OCCUPANCY.put(6, 125);
         ROOMS_MAX_OCCUPANCY.put(7, 225);
     }
+    public static final Double MIN_SMOKE_INTENSITY = 0.01;
+    public static final Double MAX_SMOKE_INTENSITY = 1.00;
 
     private Constants() {
 

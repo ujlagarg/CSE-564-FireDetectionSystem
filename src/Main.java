@@ -5,9 +5,10 @@ import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("Hello World");
-        // this is the entry point of our project. All classes will be initialized over here.
+        // this is the entry point of our project. All classes will be initialized over
+        // here.
         int numberOfRooms = 10;
         // initializing Sensors and detectors
 
@@ -16,10 +17,10 @@ public class Main {
         ArrayList<CameraSensor> cameraSensors = new ArrayList<CameraSensor>();
         ArrayList<LEDPanel> ledPanelSensors = new ArrayList<LEDPanel>();
         ArrayList<FireDetector> fireDetectors = new ArrayList<FireDetector>();
-        for(int i = 0; i< numberOfRooms; i++) {
+        for (int i = 0; i < numberOfRooms; i++) {
             smokeSensors.add(new SmokeDetectorSensor(i));
             tempSensors.add(new TempDetectorSensor(i));
-            fireDetectors.add(new FireDetector(i,smokeSensors.get(i),tempSensors.get(i)));
+            fireDetectors.add(new FireDetector(i, smokeSensors.get(i), tempSensors.get(i)));
             cameraSensors.add(new CameraSensor(i));
             ledPanelSensors.add(new LEDPanel(i));
         }
@@ -27,18 +28,33 @@ public class Main {
         // initializing Primary Controller
         PrimaryController controller = new PrimaryController(numberOfRooms);
         CameraController cameraController = controller.getCameraController();
-        FireController fireController = new FireController();
-        Map<Integer, Boolean> fireDetectedMap = new HashMap();
+        FireController fireController = new FireController(fireDetectors);
 
-       while(true){
-            for(int i = 0; i< numberOfRooms; i++) {
-                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
-                fireDetectedMap.put(i, fireDetectors.get(i).getValue());
-            }
-            if(fireDetectedMap.containsValue(true)){
-                fireController.setFire(); // setting fire = true in fire controller
+        /**
+         * Start a fire somewhere before calling while
+         */
+
+        while (true) {
+            Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
+
+            if (fireDetectedMap.containsValue(true)) {
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
+
+            /**
+             * Capture Images from Cameras
+             */
+            for (int i = 0; i < numberOfRooms; i++) {
+                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
+            }
+
+            /**
+             * Do Routing
+             */
+
+             
+            /** Light Up LED */
+
         }
 
         // For Testing Person Detector

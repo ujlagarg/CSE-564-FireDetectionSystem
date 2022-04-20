@@ -1,22 +1,32 @@
 public class FireDetector {
     int id;
-    boolean value;
+    boolean state;
+    SmokeDetectorSensor smokeDetectorSensor;
+    TempDetectorSensor tempDetectorSensor;
 
-    public FireDetector(int Id, SmokeDetectorSensor s, TempDetectorSensor t){
-       setId(Id);
-       if(s.getSmoke()>=0.14 || t.getTemperature()>=57)
-           setValue(true);
-       else
-           setValue(false);
+    public FireDetector(int Id, SmokeDetectorSensor s, TempDetectorSensor t) {
+        setId(Id);
+        tempDetectorSensor = t;
+        smokeDetectorSensor = s;
+        setState();
     }
 
-    public void setId(int Id){
+    public void setId(int Id) {
         id = Id;
     }
-    public void setValue(boolean value){
-        this.value=value;
+
+    public int getId() {
+        return id;
     }
-    public boolean getValue(){
-       return value;
+
+    public void setState() {
+        if (smokeDetectorSensor.getSmoke() >= 0.14 || tempDetectorSensor.getTemperature() >= 57)
+            this.state = true;
+        else
+            this.state = false;
+    }
+
+    public boolean getState() {
+        return state;
     }
 }
