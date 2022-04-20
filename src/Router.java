@@ -1,4 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import constants.Constants;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +24,7 @@ public class Router {
             Map<String, Map<String, Double>> temp = new ObjectMapper().readValue(fileContent, HashMap.class);
             this.graph = new HashMap<>();
             for(Map.Entry<String, Map<String, Double>> U: temp.entrySet()) {
-                this.graph.put(Integer.parseInt(U.getKey()), new HashMap<Integer, Double>());
+                this.graph.put(Integer.parseInt(U.getKey()), new HashMap<>());
                 for(Map.Entry<String, Double> V : temp.get(U.getKey()).entrySet()) {
                     this.graph.get(Integer.parseInt(U.getKey())).put(Integer.parseInt(V.getKey()), V.getValue());
                 }
@@ -31,9 +33,9 @@ public class Router {
             throw new RuntimeException(e);
         }
     }
-    public Vector<Vector<Integer>> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
+    public Map<Integer, Boolean> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
         /* Construct a new graph with all nodes containing fires removed. */
-        Map<Integer, Map<Integer, Double>> graph = new HashMap<Integer, Map<Integer, Double>>(this.graph);
+        Map<Integer, Map<Integer, Double>> graph = new HashMap<>(this.graph);
         for(Map.Entry<Integer, Boolean> room : fires.entrySet()) {
             if(room.getValue()){
                 graph.remove(room.getKey());
@@ -46,7 +48,7 @@ public class Router {
         }
 
         /* Generate list of rooms containing people. */
-        Vector<Integer> containsPeople = new Vector<Integer>();
+        Vector<Integer> containsPeople = new Vector<>();
         for(Map.Entry<Integer, Integer> count : counts.entrySet()) {
             if(count.getValue() > 0) {
                 containsPeople.add(count.getKey());
@@ -54,19 +56,32 @@ public class Router {
         }
 
         /* Calculate the shortest paths for each room */
-        Double[] dist = Dijkstras(graph);
+        Double[] dist = Dijkstras(fires);
         Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
         for(Integer room: containsPeople){
             paths.add(GetPathToExit(dist, room));
         }
 
-        return paths;
+        Map<Integer, Boolean> edges = new HashMap<>();
+        for(int i = 0; i < Constants.ROOMS_EDGE_TO_INDEX.size(); i++) {
+            edges.put(i, false);
+        }
+
+        String edge;
+        for(Vector<Integer> path : paths) {
+            for(int i = 0; i < path.size() - 1; i++) {
+                edge = "" + path.get(i) + " " + path.get(i+1);
+                edges.put(Constants.ROOMS_EDGE_TO_INDEX.get(edge), true);
+            }
+        }
+
+        return edges;
     }
 
-    private Double[] Dijkstras(Map<Integer, Map<Integer, Double>> graph) {
+    private Double[] Dijkstras(Map<Integer, Boolean> fires) {
         /* Set all values to infinity */
-        Double[] dist = new Double[graph.size()];
-        for(int j = 0; j < graph.size(); j++) {
+        Double[] dist = new Double[this.graph.size()];
+        for(int j = 0; j < this.graph.size(); j++) {
             dist[j] = Double.POSITIVE_INFINITY;
         }
         dist[5] = 0.0;
@@ -83,12 +98,16 @@ public class Router {
             current = toExplore.get(currentIndex);
             toExplore.remove(currentIndex);
             visited.add(current);
-            System.out.println(current);
 
             /* Add each of the connected nodes to toExplore */
-            for(Map.Entry<Integer, Double> node : graph.get(current).entrySet()) {
+            for(Map.Entry<Integer, Double> node : this.graph.get(current).entrySet()) {
                 next_dist = dist[current] + node.getValue();
                 nextNode = node.getKey();
+                if(fires.containsKey(node.getKey())){
+                    if(fires.get(node.getKey())){
+                        continue;
+                    }
+                }
                 if(next_dist < dist[nextNode])
                     dist[nextNode] = next_dist;
                 if(!visited.contains(nextNode))
@@ -135,6 +154,10 @@ public class Router {
             current = minNode;
             if(minNode == 5)
                 break;
+            if(minNode == -1) {
+                System.out.println("No way out for room " + room);
+                return new Vector<>();
+            }
         }
 
         return path;
