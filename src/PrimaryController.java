@@ -6,6 +6,7 @@ public class PrimaryController {
     PersonDetector personDetector;
     Router router;
     LEDController ledController;
+    SoundController soundController;
     Map<Integer, Boolean> fireMap;
 
     public PrimaryController(int numberOfRooms){
@@ -22,6 +23,8 @@ public class PrimaryController {
 
     public void startFireEvacuationSystem(){
         System.out.println("Starting system");
+        System.out.println("Sounding alarm");
+        soundController.setState(true);
         Map<Integer, Integer> peopleDetected = personDetector.detectPeople(cameraController.getImageMap());
         System.out.println("people in each room"+peopleDetected.toString());
         System.out.println("Routing people out of rooms to nearest Fire Exit:");
