@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
 
@@ -9,7 +6,7 @@ public class Main {
         System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over
         // here.
-        int numberOfRooms = 10;
+        int numberOfRooms = 5;
         // initializing Sensors and detectors
 
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
@@ -29,14 +26,21 @@ public class Main {
         PrimaryController controller = new PrimaryController(numberOfRooms);
         CameraController cameraController = controller.getCameraController();
         FireController fireController = new FireController(fireDetectors);
+        PersonDetector personDetector = new PersonDetector();
+        Router router = new Router();
 
-        /**
-         * Start a fire somewhere before calling while
-         */
+        /* Start a fire somewhere before calling while. */
+        smokeSensors.get(1).setSmokeDensity(2.0);
+        tempSensors.get(1).setTemperature(300);
+        fireDetectors.get(1).setState();
+
 
         while (true) {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
 
+            if(!fireDetectedMap.containsKey(1)){
+                fireDetectedMap.put(1, true);
+            }
             if (fireDetectedMap.containsValue(true)) {
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
@@ -49,8 +53,18 @@ public class Main {
             }
 
             /**
+             * Detect number of persons
+             */
+            Map<Integer, Integer> peopleDetected = personDetector.detectPeople(cameraController.imageMap);
+
+            /**
              * Do Routing
              */
+            System.out.println("Routing");
+            System.out.println(peopleDetected.toString());
+            System.out.println(fireDetectedMap.toString());
+            router.update(peopleDetected, fireDetectedMap);
+            System.out.println("Finished routing");
 
              
             /** Light Up LED */
