@@ -24,7 +24,12 @@ public class PrimaryController {
 
     public void startFireEvacuationSystem(){
         System.out.println("Starting system");
-        personDetector.detectPeople(cameraController.getImageMap());
+        Map<Integer, Integer> peopleDetected = personDetector.detectPeople(cameraController.getImageMap());
+        System.out.println("people in each room"+peopleDetected.toString());
+        System.out.println("Routing people out of rooms to nearest Fire Exit:");
+        Map<Integer, Boolean> edges = router.update(peopleDetected,fireMap);
+        System.out.println(edges);
+        System.out.println("Finished Routing");
     }
 
     public void stopFireEvacuationSystem(){

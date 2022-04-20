@@ -1,28 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("Hello World");
-        // this is the entry point of our project. All classes will be initialized over here.
-        int numberOfRooms = 10;
-
-        HashMap<Integer, ArrayList<Integer>> roomGraph = new HashMap<Integer, ArrayList<Integer>>(10);
-        roomGraph.put(1, new ArrayList<Integer>(Arrays.asList(2,3,8)));
-        roomGraph.put(2, new ArrayList<Integer>(Arrays.asList(1,4,5,7,9)));
-        roomGraph.put(3, new ArrayList<Integer>(Arrays.asList(1,4,5,9)));
-        roomGraph.put(4, new ArrayList<Integer>(Arrays.asList(2,3,6,8)));
-        roomGraph.put(5, new ArrayList<Integer>(Arrays.asList(2,3,9)));
-        roomGraph.put(6, new ArrayList<Integer>(Arrays.asList(4,7,8)));
-        roomGraph.put(7, new ArrayList<Integer>(Arrays.asList(2,6)));
-        roomGraph.put(8, new ArrayList<Integer>(Arrays.asList(1,4,6)));
-        roomGraph.put(9, new ArrayList<Integer>(Arrays.asList(2,3,5,10)));
-        roomGraph.put(0, new ArrayList<Integer>(Arrays.asList(9)));
-        System.out.println(roomGraph);
-
+        // this is the entry point of our project. All classes will be initialized over
+        // here.
+        int numberOfRooms = 5;
         // initializing Sensors and detectors
 
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
@@ -46,22 +30,14 @@ public class Main {
         /**
          * Start a fire somewhere before calling while
          */
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Enter temperature and smoke reading for any 1 room seperated by comma(,):");
-        String[] readings = reader.readLine().split(",");
-        int tempReading = Integer.parseInt(readings[0]);
-        int smokeReading = Integer.parseInt(readings[1]);
-        System.out.println(tempReading+" "+smokeReading);
-
-        fireDetectors.get(1).smokeDetectorSensor.setSmokeDensity(smokeReading);
-        fireDetectors.get(1).tempDetectorSensor.setTemperature(tempReading);
+        fireDetectors.get(1).smokeDetectorSensor.setSmokeDensity(0.5);
+        fireDetectors.get(1).tempDetectorSensor.setTemperature(67);
         fireDetectors.get(1).setState();
 
         while (true) {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
 
             if (fireDetectedMap.containsValue(true)) {
-                System.out.println("in if condition, fire has value true");
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
 
@@ -69,31 +45,11 @@ public class Main {
              * Capture Images from Cameras
              */
             for (int i = 0; i < numberOfRooms; i++) {
-                System.out.println("Capturing images");
                 cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
             }
 
-            /**
-             * Do Routing
-             */
-
-
-            /** Light Up LED */
             Thread.sleep(3000);
-            System.out.println("sleeping");
         }
-
-        // For Testing Person Detector
-        // PersonDetector pd = new PersonDetector();
-        // Map<Integer, Integer[]> imageMap = new HashMap<Integer, Integer[]>();
-        // imageMap.put(1, new Integer[]{ 1,2,3,4,5,6,7,8,9,10 });
-        // imageMap.put(2, new Integer[]{ 1,2,3,4,5,7,8,9,10 });
-        // imageMap.put(3, new Integer[]{ 1,2,3,4,5,7,8,9,10 });
-        // imageMap.put(4, new Integer[]{ 1,2,3,6,7,8,9,10 });
-        // imageMap.put(5, new Integer[]{ 4,5,6,7,8,9,10 });
-        // imageMap.put(6, new Integer[]{ 3,4,5,6,7,8,9,10 });
-        // imageMap.put(7, new Integer[]{ 3,4,5,6,7,8,9,10 });
-        // System.out.print(pd.detectPeople(imageMap));
 
     }
 }
