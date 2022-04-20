@@ -61,13 +61,12 @@ public class Main {
              * Do Routing
              */
             System.out.println("Routing");
-            System.out.println(peopleDetected.toString());
-            System.out.println(fireDetectedMap.toString());
-            router.update(peopleDetected, fireDetectedMap);
+            Map<Integer, Boolean> edges = router.update(peopleDetected, fireDetectedMap);
             System.out.println("Finished routing");
 
              
             /** Light Up LED */
+
 
         }
 

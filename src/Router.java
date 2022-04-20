@@ -1,4 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import constants.Constants;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +24,7 @@ public class Router {
             Map<String, Map<String, Double>> temp = new ObjectMapper().readValue(fileContent, HashMap.class);
             this.graph = new HashMap<>();
             for(Map.Entry<String, Map<String, Double>> U: temp.entrySet()) {
-                this.graph.put(Integer.parseInt(U.getKey()), new HashMap<Integer, Double>());
+                this.graph.put(Integer.parseInt(U.getKey()), new HashMap<>());
                 for(Map.Entry<String, Double> V : temp.get(U.getKey()).entrySet()) {
                     this.graph.get(Integer.parseInt(U.getKey())).put(Integer.parseInt(V.getKey()), V.getValue());
                 }
@@ -31,9 +33,9 @@ public class Router {
             throw new RuntimeException(e);
         }
     }
-    public Vector<Vector<Integer>> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
+    public Map<Integer, Boolean> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
         /* Construct a new graph with all nodes containing fires removed. */
-        Map<Integer, Map<Integer, Double>> graph = new HashMap<Integer, Map<Integer, Double>>(this.graph);
+        Map<Integer, Map<Integer, Double>> graph = new HashMap<>(this.graph);
         for(Map.Entry<Integer, Boolean> room : fires.entrySet()) {
             if(room.getValue()){
                 graph.remove(room.getKey());
@@ -46,7 +48,7 @@ public class Router {
         }
 
         /* Generate list of rooms containing people. */
-        Vector<Integer> containsPeople = new Vector<Integer>();
+        Vector<Integer> containsPeople = new Vector<>();
         for(Map.Entry<Integer, Integer> count : counts.entrySet()) {
             if(count.getValue() > 0) {
                 containsPeople.add(count.getKey());
@@ -60,14 +62,16 @@ public class Router {
             paths.add(GetPathToExit(dist, room));
         }
 
-        Vector<Vector<Integer>> edges = new Vector<>();
-        Vector<Integer> edge;
+        Map<Integer, Boolean> edges = new HashMap<>();
+        for(int i = 0; i < Constants.ROOMS_EDGE_TO_INDEX.size(); i++) {
+            edges.put(i, false);
+        }
+
+        String edge;
         for(Vector<Integer> path : paths) {
             for(int i = 0; i < path.size() - 1; i++) {
-                edge = new Vector<>();
-                edge.add(path.get(i));
-                edge.add(path.get(i+1));
-                edges.add(edge);
+                edge = "" + path.get(i) + " " + path.get(i+1);
+                edges.put(Constants.ROOMS_EDGE_TO_INDEX.get(edge), true);
             }
         }
 
@@ -152,7 +156,7 @@ public class Router {
                 break;
             if(minNode == -1) {
                 System.out.println("No way out for room " + room);
-                return path;
+                return new Vector<>();
             }
         }
 
