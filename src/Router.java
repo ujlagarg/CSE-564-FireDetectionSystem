@@ -54,19 +54,30 @@ public class Router {
         }
 
         /* Calculate the shortest paths for each room */
-        Double[] dist = Dijkstras(graph);
+        Double[] dist = Dijkstras();
         Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
         for(Integer room: containsPeople){
             paths.add(GetPathToExit(dist, room));
         }
 
-        return paths;
+        Vector<Vector<Integer>> edges = new Vector<>();
+        Vector<Integer> edge;
+        for(Vector<Integer> path : paths) {
+            for(int i = 0; i < path.size() - 1; i++) {
+                edge = new Vector<>();
+                edge.add(path.get(i));
+                edge.add(path.get(i+1));
+                edges.add(edge);
+            }
+        }
+
+        return edges;
     }
 
-    private Double[] Dijkstras(Map<Integer, Map<Integer, Double>> graph) {
+    private Double[] Dijkstras() {
         /* Set all values to infinity */
-        Double[] dist = new Double[graph.size()];
-        for(int j = 0; j < graph.size(); j++) {
+        Double[] dist = new Double[this.graph.size()];
+        for(int j = 0; j < this.graph.size(); j++) {
             dist[j] = Double.POSITIVE_INFINITY;
         }
         dist[5] = 0.0;
@@ -83,10 +94,9 @@ public class Router {
             current = toExplore.get(currentIndex);
             toExplore.remove(currentIndex);
             visited.add(current);
-            System.out.println(current);
 
             /* Add each of the connected nodes to toExplore */
-            for(Map.Entry<Integer, Double> node : graph.get(current).entrySet()) {
+            for(Map.Entry<Integer, Double> node : this.graph.get(current).entrySet()) {
                 next_dist = dist[current] + node.getValue();
                 nextNode = node.getKey();
                 if(next_dist < dist[nextNode])
@@ -135,6 +145,10 @@ public class Router {
             current = minNode;
             if(minNode == 5)
                 break;
+            if(minNode == -1) {
+                System.out.println("No way out for room " + room);
+                return path;
+            }
         }
 
         return path;
