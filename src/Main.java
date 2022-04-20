@@ -29,15 +29,18 @@ public class Main {
         PersonDetector personDetector = new PersonDetector();
         Router router = new Router();
 
-        /**
-         * Start a fire somewhere before calling while
-         */
-
+        /* Start a fire somewhere before calling while. */
+        smokeSensors.get(1).setSmokeDensity(2.0);
+        tempSensors.get(1).setTemperature(300);
+        fireDetectors.get(1).setState();
 
 
         while (true) {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
 
+            if(!fireDetectedMap.containsKey(1)){
+                fireDetectedMap.put(1, true);
+            }
             if (fireDetectedMap.containsValue(true)) {
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
@@ -58,7 +61,6 @@ public class Main {
              * Do Routing
              */
             System.out.println("Routing");
-            fireDetectedMap.put(4, true);
             System.out.println(peopleDetected.toString());
             System.out.println(fireDetectedMap.toString());
             router.update(peopleDetected, fireDetectedMap);

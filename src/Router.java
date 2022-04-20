@@ -6,7 +6,7 @@ import java.util.*;
 
 
 public class Router {
-    private final Map<Integer, Map<Integer, Float>> graph;
+    private final Map<Integer, Map<Integer, Double>> graph;
 
     /**
      * Loads the map from a JSON file.
@@ -19,21 +19,27 @@ public class Router {
         try {
             byte[] bytes = Files.readAllBytes(Paths.get("data/map.json"));
             String fileContent = new String (bytes);
-            this.graph = new ObjectMapper().readValue(fileContent, HashMap.class);
-            System.out.println(this.graph.toString());
+            Map<String, Map<String, Double>> temp = new ObjectMapper().readValue(fileContent, HashMap.class);
+            this.graph = new HashMap<>();
+            for(Map.Entry<String, Map<String, Double>> U: temp.entrySet()) {
+                this.graph.put(Integer.parseInt(U.getKey()), new HashMap<Integer, Double>());
+                for(Map.Entry<String, Double> V : temp.get(U.getKey()).entrySet()) {
+                    this.graph.get(Integer.parseInt(U.getKey())).put(Integer.parseInt(V.getKey()), V.getValue());
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     public Vector<Vector<Integer>> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
         /* Construct a new graph with all nodes containing fires removed. */
-        Map<Integer, Map<Integer, Float>> graph = new HashMap<Integer, Map<Integer, Float>>(this.graph);
+        Map<Integer, Map<Integer, Double>> graph = new HashMap<Integer, Map<Integer, Double>>(this.graph);
         for(Map.Entry<Integer, Boolean> room : fires.entrySet()) {
-            if((boolean) room.getValue()){
+            if(room.getValue()){
                 graph.remove(room.getKey());
 
                 /* Remove all paths to the room */
-                for(Map.Entry<Integer, Map<Integer, Float>> targets : graph.entrySet()) {
+                for(Map.Entry<Integer, Map<Integer, Double>> targets : graph.entrySet()) {
                     targets.getValue().remove(room.getKey());
                 }
             }
@@ -48,7 +54,7 @@ public class Router {
         }
 
         /* Calculate the shortest paths for each room */
-        Float[] dist = Dijkstras();
+        Double[] dist = Dijkstras(graph);
         Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
         for(Integer room: containsPeople){
             paths.add(GetPathToExit(dist, room));
@@ -57,13 +63,13 @@ public class Router {
         return paths;
     }
 
-    private Float[] Dijkstras() {
+    private Double[] Dijkstras(Map<Integer, Map<Integer, Double>> graph) {
         /* Set all values to infinity */
-        Float[] dist = new Float[this.graph.size()];
-        for(int j = 0; j < this.graph.size(); j++) {
-            dist[j] = Float.POSITIVE_INFINITY;
+        Double[] dist = new Double[graph.size()];
+        for(int j = 0; j < graph.size(); j++) {
+            dist[j] = Double.POSITIVE_INFINITY;
         }
-        dist[5] = 0f;
+        dist[5] = 0.0;
 
         /* Initialize variables */
         Vector<Integer> toExplore = new Vector<>();
@@ -71,16 +77,16 @@ public class Router {
         Set<Integer> visited = new HashSet<>();
 
         int current, currentIndex, nextNode;
-        float next_dist;
+        double next_dist;
         while(toExplore.size() > 0){
             currentIndex = GetNextNode(toExplore, dist);
             current = toExplore.get(currentIndex);
-            System.out.println(current);
             toExplore.remove(currentIndex);
             visited.add(current);
-            /* Add each of the connected nodes to toExplore */
             System.out.println(current);
-            for(Map.Entry<Integer, Float> node : this.graph.get(current).entrySet()) {
+
+            /* Add each of the connected nodes to toExplore */
+            for(Map.Entry<Integer, Double> node : graph.get(current).entrySet()) {
                 next_dist = dist[current] + node.getValue();
                 nextNode = node.getKey();
                 if(next_dist < dist[nextNode])
@@ -93,9 +99,9 @@ public class Router {
         return dist;
     }
 
-    private int GetNextNode(Vector<Integer> toExplore, Float[] dist) {
+    private int GetNextNode(Vector<Integer> toExplore, Double[] dist) {
         int minNode = -1, node;
-        Float minDistance = Float.POSITIVE_INFINITY;
+        Double minDistance = Double.POSITIVE_INFINITY;
         for(int i = 0; i < toExplore.size(); i++){
             node = toExplore.get(i);
             if(dist[node] < minDistance) {
@@ -106,16 +112,15 @@ public class Router {
         return minNode;
     }
 
-    private Vector<Integer> GetPathToExit(Float[] dist, Integer room) {
+    private Vector<Integer> GetPathToExit(Double[] dist, Integer room) {
         Vector<Integer> path = new Vector<>();
-        Boolean reached = false;
         int current = room, considered, minNode;
-        Float minDist;
+        Double minDist;
         path.add(room);
         for(int i = 0; i < this.graph.size(); i++){
-            minDist = Float.POSITIVE_INFINITY;
+            minDist = Double.POSITIVE_INFINITY;
             minNode = -1;
-            for(Map.Entry<Integer, Float> node : this.graph.get(current).entrySet()){
+            for(Map.Entry<Integer, Double> node : this.graph.get(current).entrySet()){
                 considered = node.getKey();
                 if(considered == 5){
                     minNode = 5;
