@@ -9,6 +9,7 @@ public class Main {
         System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over here.
         int numberOfRooms = 10;
+
         HashMap<Integer, ArrayList<Integer>> roomGraph = new HashMap<Integer, ArrayList<Integer>>(10);
         roomGraph.put(1, new ArrayList<Integer>(Arrays.asList(2,3,8)));
         roomGraph.put(2, new ArrayList<Integer>(Arrays.asList(1,4,5,7,9)));
@@ -30,15 +31,16 @@ public class Main {
         System.out.println(tempReading+" "+smokeReading);
 
         // initializing Sensors and detectors
+
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
         ArrayList<TempDetectorSensor> tempSensors = new ArrayList<TempDetectorSensor>();
         ArrayList<CameraSensor> cameraSensors = new ArrayList<CameraSensor>();
         ArrayList<LEDPanel> ledPanelSensors = new ArrayList<LEDPanel>();
         ArrayList<FireDetector> fireDetectors = new ArrayList<FireDetector>();
-        for(int i = 0; i< numberOfRooms; i++) {
+        for (int i = 0; i < numberOfRooms; i++) {
             smokeSensors.add(new SmokeDetectorSensor(i));
             tempSensors.add(new TempDetectorSensor(i));
-            fireDetectors.add(new FireDetector(i,smokeSensors.get(i),tempSensors.get(i)));
+            fireDetectors.add(new FireDetector(i, smokeSensors.get(i), tempSensors.get(i)));
             cameraSensors.add(new CameraSensor(i));
             ledPanelSensors.add(new LEDPanel(i));
         }
@@ -46,18 +48,33 @@ public class Main {
         // initializing Primary Controller
         PrimaryController controller = new PrimaryController(numberOfRooms);
         CameraController cameraController = controller.getCameraController();
-        FireController fireController = new FireController();
-        Map<Integer, Boolean> fireDetectedMap = new HashMap();
+        FireController fireController = new FireController(fireDetectors);
 
-       while(fireDetectedMap.containsValue(true)){
-            for(int i = 0; i< numberOfRooms; i++) {
-                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
-                fireDetectedMap.put(i, fireDetectors.get(i).getValue());
-            }
-            if(fireDetectedMap.containsValue(true)){
-                fireController.setFire(); // setting fire = true in fire controller
+        /**
+         * Start a fire somewhere before calling while
+         */
+
+        while (true) {
+            Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
+
+            if (fireDetectedMap.containsValue(true)) {
                 controller.setFireDetectorSignal(fireDetectedMap);
             }
+
+            /**
+             * Capture Images from Cameras
+             */
+            for (int i = 0; i < numberOfRooms; i++) {
+                cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
+            }
+
+            /**
+             * Do Routing
+             */
+
+
+            /** Light Up LED */
+
         }
 
         // For Testing Person Detector

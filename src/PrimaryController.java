@@ -27,6 +27,11 @@ public class PrimaryController {
 //        personDetector.detectPeople(cameraController.getImageMap());
     }
 
+    public void stopFireEvacuationSystem(){
+        System.out.println("Stopping system");
+//        personDetector.detectPeople(cameraController.getImageMap());
+    }
+
     public CameraController getCameraController(){
         return cameraController;
     }
