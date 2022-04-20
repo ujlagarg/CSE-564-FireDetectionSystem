@@ -12,6 +12,7 @@ public class PersonDetector {
         for (Map.Entry<Integer, Integer[]> set : imageMap.entrySet()) {
             if (random.nextBoolean()) {
                 Integer roomId = set.getKey();
+                System.out.println(roomId);
                 Integer max = Constants.ROOMS_MAX_OCCUPANCY.get(roomId);
                 peopleDetected.put(roomId, random.nextInt(max - min + 1) + min);
             } else {

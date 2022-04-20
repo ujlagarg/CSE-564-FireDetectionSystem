@@ -51,7 +51,7 @@ public class Router {
         Float[] dist = Dijkstras();
         Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
         for(Integer room: containsPeople){
-            paths.add(getPathToExit(dist, room));
+            paths.add(GetPathToExit(dist, room));
         }
 
         return paths;
@@ -63,20 +63,23 @@ public class Router {
         for(int j = 0; j < this.graph.size(); j++) {
             dist[j] = Float.POSITIVE_INFINITY;
         }
-        dist[0] = 0f;
+        dist[5] = 0f;
 
         /* Initialize variables */
         Vector<Integer> toExplore = new Vector<>();
-        toExplore.add(0);
+        toExplore.add(5);
         Set<Integer> visited = new HashSet<>();
 
-        int current, nextNode;
+        int current, currentIndex, nextNode;
         float next_dist;
         while(toExplore.size() > 0){
-            current = GetNextNode(toExplore, dist);
-            toExplore.remove(current);
+            currentIndex = GetNextNode(toExplore, dist);
+            current = toExplore.get(currentIndex);
+            System.out.println(current);
+            toExplore.remove(currentIndex);
             visited.add(current);
             /* Add each of the connected nodes to toExplore */
+            System.out.println(current);
             for(Map.Entry<Integer, Float> node : this.graph.get(current).entrySet()) {
                 next_dist = dist[current] + node.getValue();
                 nextNode = node.getKey();
@@ -91,18 +94,19 @@ public class Router {
     }
 
     private int GetNextNode(Vector<Integer> toExplore, Float[] dist) {
-        int minNode = -1;
+        int minNode = -1, node;
         Float minDistance = Float.POSITIVE_INFINITY;
-        for(Integer node: toExplore){
+        for(int i = 0; i < toExplore.size(); i++){
+            node = toExplore.get(i);
             if(dist[node] < minDistance) {
                 minDistance = dist[node];
-                minNode = node;
+                minNode = i;
             }
         }
         return minNode;
     }
 
-    private Vector<Integer> getPathToExit(Float[] dist, Integer room) {
+    private Vector<Integer> GetPathToExit(Float[] dist, Integer room) {
         Vector<Integer> path = new Vector<>();
         Boolean reached = false;
         int current = room, considered, minNode;
@@ -113,8 +117,8 @@ public class Router {
             minNode = -1;
             for(Map.Entry<Integer, Float> node : this.graph.get(current).entrySet()){
                 considered = node.getKey();
-                if(considered == 0){
-                    minNode = 0;
+                if(considered == 5){
+                    minNode = 5;
                     break;
                 }
                 if(dist[considered] < minDist){
@@ -124,15 +128,10 @@ public class Router {
             }
             path.add(minNode);
             current = minNode;
-            if(minNode == 0)
+            if(minNode == 5)
                 break;
         }
 
         return path;
-    }
-
-    public static void main() {
-        Map<Integer, Integer> counts;
-        Map<Integer, Boolean> detected;
     }
 }
