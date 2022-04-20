@@ -1,5 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -15,7 +17,10 @@ public class Router {
     public Router() {
         /* Load graph */
         try {
-            this.graph = new ObjectMapper().readValue("data/map_sample.json", HashMap.class);
+            byte[] bytes = Files.readAllBytes(Paths.get("data/map.json"));
+            String fileContent = new String (bytes);
+            this.graph = new ObjectMapper().readValue(fileContent, HashMap.class);
+            System.out.println(this.graph.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -124,5 +129,10 @@ public class Router {
         }
 
         return path;
+    }
+
+    public static void main() {
+        Map<Integer, Integer> counts;
+        Map<Integer, Boolean> detected;
     }
 }
