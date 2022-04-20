@@ -1,10 +1,9 @@
 public class SmokeDetectorSensor {
     int id;
-    double value;
+    double smokeDensity;
 
     public SmokeDetectorSensor(int Id) {
         setId(Id);
-        setSmokeDensity(Math.random());
     }
 
     public void setId(int Id) {
@@ -12,7 +11,7 @@ public class SmokeDetectorSensor {
     }
 
     public void setSmokeDensity(double smoke) {
-        value = smoke;
+        smokeDensity = smoke;
     }
 
     public int getId() {
@@ -20,6 +19,6 @@ public class SmokeDetectorSensor {
     }
 
     public double getSmoke() {
-        return value;
+        return smokeDensity;
     }
 }

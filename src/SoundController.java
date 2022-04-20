@@ -16,13 +16,4 @@ public class SoundController {
             alarm.setState(state);
         }
     }
-
-    // public Map<Integer, Boolean> getState() {
-    //     Map<Integer, Boolean> alarmStates = new HashMap<Integer, Boolean>();
-    //     for (Alarm alarm : alarms) {
-    //         alarmStates.put(alarm.getId(), alarm.getState());
-    //     }
-
-    //     return alarmStates;
-    // }
 }

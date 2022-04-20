@@ -3,7 +3,6 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over
         // here.
         int numberOfRooms = 5;
@@ -22,10 +21,10 @@ public class Main {
             ledPanelSensors.add(new LEDPanel(i));
         }
 
-        // initializing Primary Controller
+        // initializing Primary Controller and Fire Controller
+        FireController fireController = new FireController(fireDetectors);
         PrimaryController controller = new PrimaryController(numberOfRooms);
         CameraController cameraController = controller.getCameraController();
-        FireController fireController = new FireController(fireDetectors);
 
         /**
          * Start a fire somewhere before calling while
@@ -35,17 +34,16 @@ public class Main {
         fireDetectors.get(1).setState();
 
         while (true) {
-            Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
-
-            if (fireDetectedMap.containsValue(true)) {
-                controller.setFireDetectorSignal(fireDetectedMap);
-            }
-
             /**
              * Capture Images from Cameras
              */
             for (int i = 0; i < numberOfRooms; i++) {
                 cameraController.updateImageMap(i, cameraSensors.get(i).getImage());
+            }
+
+            Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
+            if (fireDetectedMap.containsValue(true)) {
+                controller.setFireDetectorSignal(fireDetectedMap);
             }
 
             Thread.sleep(3000);

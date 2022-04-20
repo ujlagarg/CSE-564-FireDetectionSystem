@@ -2,7 +2,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PrimaryController {
-    int noOfRooms = 0;
     CameraController cameraController;
     PersonDetector personDetector;
     Router router;
@@ -10,7 +9,6 @@ public class PrimaryController {
     Map<Integer, Boolean> fireMap;
 
     public PrimaryController(int numberOfRooms){
-        noOfRooms = numberOfRooms;
         cameraController = new CameraController();
         personDetector = new PersonDetector();
         router = new Router();
