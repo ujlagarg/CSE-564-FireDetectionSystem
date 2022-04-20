@@ -5,6 +5,7 @@ import constants.Constants;
 
 public class PersonDetector {
     public Map<Integer, Integer> detectPeople(Map<Integer, Integer[]> imageMap) {
+        System.out.println("Detecting people from images");
         Map<Integer, Integer> peopleDetected = new HashMap<Integer, Integer>();
         Random random = new Random();
         Integer min = 1;
