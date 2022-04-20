@@ -16,6 +16,7 @@ public class PrimaryController {
         personDetector = new PersonDetector();
         router = new Router();
         ledController = new LEDController();
+        soundController = new SoundController();
     }
 
     public void setFireDetectorSignal(Map<Integer, Boolean> fireDetectedMap) {
