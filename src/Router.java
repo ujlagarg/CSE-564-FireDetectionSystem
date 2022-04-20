@@ -84,11 +84,11 @@ public class Router {
         for(int j = 0; j < this.graph.size(); j++) {
             dist[j] = Double.POSITIVE_INFINITY;
         }
-        dist[5] = 0.0;
+        dist[Constants.ROOM_COUNT] = 0.0;
 
         /* Initialize variables */
         Vector<Integer> toExplore = new Vector<>();
-        toExplore.add(5);
+        toExplore.add(Constants.ROOM_COUNT);
         Set<Integer> visited = new HashSet<>();
 
         int current, currentIndex, nextNode;
@@ -141,8 +141,8 @@ public class Router {
             minNode = -1;
             for(Map.Entry<Integer, Double> node : this.graph.get(current).entrySet()){
                 considered = node.getKey();
-                if(considered == 5){
-                    minNode = 5;
+                if(considered == Constants.ROOM_COUNT){
+                    minNode = Constants.ROOM_COUNT;
                     break;
                 }
                 if(dist[considered] < minDist){
@@ -152,7 +152,7 @@ public class Router {
             }
             path.add(minNode);
             current = minNode;
-            if(minNode == 5)
+            if(minNode == Constants.ROOM_COUNT)
                 break;
             if(minNode == -1) {
                 System.out.println("No way out for room " + room);

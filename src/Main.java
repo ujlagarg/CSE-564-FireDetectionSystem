@@ -1,3 +1,5 @@
+import constants.Constants;
+
 import java.util.*;
 
 public class Main {
@@ -6,7 +8,7 @@ public class Main {
         System.out.println("Hello World");
         // this is the entry point of our project. All classes will be initialized over
         // here.
-        int numberOfRooms = 5;
+        int numberOfRooms = Constants.ROOM_COUNT;
         // initializing Sensors and detectors
 
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
