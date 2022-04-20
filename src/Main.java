@@ -44,9 +44,11 @@ public class Main {
             Map<Integer, Boolean> fireDetectedMap = fireController.getFireDetectedMap();
             if (fireDetectedMap.containsValue(true)) {
                 controller.setFireDetectorSignal(fireDetectedMap);
+            } else {
+                controller.stopFireEvacuationSystem();
             }
 
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         }
 
     }
