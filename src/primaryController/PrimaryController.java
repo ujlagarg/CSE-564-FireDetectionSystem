@@ -9,6 +9,7 @@ public class PrimaryController {
     PersonDetector personDetector;
     public Router router;
     LEDController ledController;
+    SoundController soundController;
     Map<Integer, Boolean> fireMap;
 
     public PrimaryController(int numberOfRooms) {
@@ -16,6 +17,7 @@ public class PrimaryController {
         personDetector = new PersonDetector();
         router = new Router();
         ledController = new LEDController();
+        soundController = new SoundController();
     }
 
     public void setFireDetectorSignal(Map<Integer, Boolean> fireDetectedMap) {
@@ -32,8 +34,16 @@ public class PrimaryController {
 
     public void startFireEvacuationSystem() {
         System.out.println("🤖 Initiating Evacuation System");
+
+        /** Sound Alarms */
+        System.out.println("🔊 Sounding alarm");
+        soundController.setState(true);
+
+        /** Detect People */
         Map<Integer, Integer> peopleDetected = personDetector.detectPeople(cameraController.getImageMap());
         System.out.println("🙋 People detected in each room" + peopleDetected.toString());
+
+        /** Calculate Routes */
         System.out.println("🚨 Routing people out of rooms to nearest Fire Exit");
         Map<Integer, Boolean> edges = router.update(peopleDetected, fireMap);
 
