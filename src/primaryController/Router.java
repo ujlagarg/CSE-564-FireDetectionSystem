@@ -1,3 +1,5 @@
+package primaryController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import constants.Constants;
 
@@ -9,6 +11,7 @@ import java.util.*;
 
 public class Router {
     private final Map<Integer, Map<Integer, Double>> graph;
+    public Map<Integer, Integer[]> roomMap = new HashMap<Integer, Integer[]>();
 
     /**
      * Loads the map from a JSON file.
@@ -25,9 +28,15 @@ public class Router {
             this.graph = new HashMap<>();
             for(Map.Entry<String, Map<String, Double>> U: temp.entrySet()) {
                 this.graph.put(Integer.parseInt(U.getKey()), new HashMap<>());
+                ArrayList<Integer> rooms = new ArrayList<Integer>();
                 for(Map.Entry<String, Double> V : temp.get(U.getKey()).entrySet()) {
                     this.graph.get(Integer.parseInt(U.getKey())).put(Integer.parseInt(V.getKey()), V.getValue());
+                    rooms.add(Integer.parseInt(V.getKey()));
+
                 }
+                Integer[] intRooms = new Integer[rooms.size()];
+                intRooms = rooms.toArray(intRooms);
+                roomMap.put(Integer.parseInt(U.getKey()), intRooms);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -155,7 +164,7 @@ public class Router {
             if(minNode == 5)
                 break;
             if(minNode == -1) {
-                System.out.println("No way out for room " + room);
+                System.out.println("🔥 Room " + room + " has no viable paths");
                 return new Vector<>();
             }
         }

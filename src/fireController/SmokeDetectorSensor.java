@@ -1,3 +1,5 @@
+package fireController;
+
 public class SmokeDetectorSensor {
     int id;
     double smokeDensity;

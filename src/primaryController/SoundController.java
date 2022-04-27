@@ -1,5 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
+package primaryController;
 
 public class SoundController {
     Alarm[] alarms = new Alarm[250];
@@ -10,7 +9,7 @@ public class SoundController {
 
     public void setState(boolean state) {
         /**
-         * Switch Alarm Actuators
+         * Switch primaryController.Alarm Actuators
          */
         for (Alarm alarm : alarms) {
             alarm.setState(state);

@@ -1,8 +1,10 @@
+package fireController;
+
 public class FireDetector {
     int id;
     boolean state;
-    SmokeDetectorSensor smokeDetectorSensor;
-    TempDetectorSensor tempDetectorSensor;
+    public SmokeDetectorSensor smokeDetectorSensor;
+    public TempDetectorSensor tempDetectorSensor;
 
     public FireDetector(int Id, SmokeDetectorSensor s, TempDetectorSensor t) {
         setId(Id);

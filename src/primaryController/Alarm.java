@@ -1,3 +1,5 @@
+package primaryController;
+
 public class Alarm {
     int id;
     boolean state = false;

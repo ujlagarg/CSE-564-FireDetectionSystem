@@ -1,3 +1,5 @@
+package fireController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +38,20 @@ public class FireController {
             if (isCurrentRoomBurning) {
                 Integer[] neighboringRoomIds = roomMap.get(currentRoomId);
                 for (Integer id : neighboringRoomIds) {
-                    Boolean isItBurning = fireDetectorMap.get(id).getState();
+                    if (id == 5) {
+                        continue;
+                    }
+
+                    FireDetector neighboringFireDetector = fireDetectorMap.get(id);
+                    Boolean isItBurning = neighboringFireDetector.getState();
                     if (!isItBurning) {
                         /** Random Smoke */
-                        fireDetector.smokeDetectorSensor.setSmokeDensity(random.nextDouble());
+                        neighboringFireDetector.smokeDetectorSensor.setSmokeDensity(0.16 * random.nextDouble());
 
                         /** Random Heat */
-                        fireDetector.tempDetectorSensor.setTemperature((Math.random() * 81) + 20);
+                        neighboringFireDetector.tempDetectorSensor.setTemperature(random.nextInt(60));
+
+                        neighboringFireDetector.setState();
                         continue;
                     }
                     ;

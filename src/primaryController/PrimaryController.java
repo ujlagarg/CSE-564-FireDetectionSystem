@@ -1,4 +1,5 @@
-import java.util.HashMap;
+package primaryController;
+
 import java.util.Map;
 
 import constants.Constants;
@@ -6,7 +7,7 @@ import constants.Constants;
 public class PrimaryController {
     CameraController cameraController;
     PersonDetector personDetector;
-    Router router;
+    public Router router;
     LEDController ledController;
     Map<Integer, Boolean> fireMap;
 
@@ -19,14 +20,21 @@ public class PrimaryController {
 
     public void setFireDetectorSignal(Map<Integer, Boolean> fireDetectedMap) {
         fireMap = fireDetectedMap;
+
+        for (Map.Entry<Integer, Boolean> set : fireDetectedMap.entrySet()) {
+            if (set.getValue()) {
+                System.out.println("🔥 Fire detected in Room " + set.getKey());
+            }
+        }
+
         startFireEvacuationSystem();
     }
 
     public void startFireEvacuationSystem() {
-        System.out.println("Starting system");
+        System.out.println("🤖 Initiating Evacuation System");
         Map<Integer, Integer> peopleDetected = personDetector.detectPeople(cameraController.getImageMap());
-        System.out.println("People detected in each room" + peopleDetected.toString());
-        System.out.println("Routing people out of rooms to nearest Fire Exit");
+        System.out.println("🙋 People detected in each room" + peopleDetected.toString());
+        System.out.println("🚨 Routing people out of rooms to nearest Fire Exit");
         Map<Integer, Boolean> edges = router.update(peopleDetected, fireMap);
 
         /** Make LED Path adjacency matrix */
@@ -38,15 +46,16 @@ public class PrimaryController {
                 int to = Integer.parseInt(path[1]);
 
                 edgesAdjacencyMatrix[from][to] = 1;
-                System.out.println("Lighting path from " + from + " to " + to);
+                System.out.println("🚥 Lighting path from " + from + " to " + to + " 🚥");
             }
         }
 
-        System.out.println("Finished Routing");
+        System.out.println("✅ Finished Routing");
+        System.out.println(" ");
     }
 
     public void stopFireEvacuationSystem() {
-        System.out.println("No fire detected. All good");
+        System.out.println("👌🏻 No fire detected. All good");
     }
 
     public CameraController getCameraController() {

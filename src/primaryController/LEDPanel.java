@@ -1,3 +1,5 @@
+package primaryController;
+
 public class LEDPanel {
     int id;
     Boolean state = false;
