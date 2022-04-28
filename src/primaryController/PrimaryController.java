@@ -48,7 +48,7 @@ public class PrimaryController {
         Map<Integer, Boolean> edges = router.update(peopleDetected, fireMap);
 
         /** Make LED Path adjacency matrix */
-        Integer[][] edgesAdjacencyMatrix = new Integer[6][6];
+        Integer[][] edgesAdjacencyMatrix = new Integer[Constants.ROOM_COUNT + 1][Constants.ROOM_COUNT + 1];
         for (Map.Entry<String, Integer> room : Constants.ROOMS_EDGE_TO_INDEX.entrySet()) {
             if (edges.get(room.getValue())) {
                 String[] path = room.getKey().split(" ");

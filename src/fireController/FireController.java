@@ -1,9 +1,6 @@
 package fireController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import constants.Constants;
 
@@ -38,7 +35,7 @@ public class FireController {
             if (isCurrentRoomBurning) {
                 Integer[] neighboringRoomIds = roomMap.get(currentRoomId);
                 for (Integer id : neighboringRoomIds) {
-                    if (id == 5) {
+                    if (Objects.equals(id, Constants.ROOM_COUNT)) {
                         continue;
                     }
 

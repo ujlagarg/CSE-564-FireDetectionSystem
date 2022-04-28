@@ -1,5 +1,6 @@
 import java.util.*;
 
+import constants.Constants;
 import fireController.FireController;
 import fireController.FireDetector;
 import fireController.SmokeDetectorSensor;
@@ -14,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         // this is the entry point of our project. All classes will be initialized over
         // here.
-        int numberOfRooms = 5;
+        int numberOfRooms = Constants.ROOM_COUNT;
         // initializing Sensors and detectors
 
         ArrayList<SmokeDetectorSensor> smokeSensors = new ArrayList<SmokeDetectorSensor>();
