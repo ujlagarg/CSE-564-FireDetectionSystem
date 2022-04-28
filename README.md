@@ -7,7 +7,7 @@ detection of a fire, it calculates the safest paths for persons
 in the building, and guides them using alarms and LEDs. 
 
 ## 2. Installation and Execution
-Execution requires Intellij IDEA.
+Please use Intellij IDEA for library support and installation.
 
 - Navigate to `[File | Project Structure]` > 
 `[Project Settings | Libraries]`.
