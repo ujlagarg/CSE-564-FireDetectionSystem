@@ -186,7 +186,6 @@ public class Router {
         int current = room, considered, minNode;
         Double minDist;
         path.add(room);
-        System.out.println(this.graph);
         for(int i = 0; i < this.graph.size(); i++){
             minDist = Double.POSITIVE_INFINITY;
             minNode = -1;
