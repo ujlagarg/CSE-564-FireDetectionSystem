@@ -13,6 +13,6 @@ Please use Intellij IDEA for library support and installation.
 `[Project Settings | Libraries]`.
 - Go to `+ | From Maven`.
 - Enter `com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:2.5.3` and press OK.
-- Build the project and run Main.java.
+- Build the project and run `Main.java`.
 
 *If using Eclipse, check [here](https://wiki.eclipse.org/FAQ_How_do_I_add_an_extra_library_to_my_project%27s_classpath%3F).*
