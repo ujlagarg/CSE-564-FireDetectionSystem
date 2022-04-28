@@ -43,43 +43,59 @@ public class Router {
         }
     }
     public Map<Integer, Boolean> update(Map<Integer, Integer> counts, Map<Integer, Boolean> fires) {
-        /* Construct a new graph with all nodes containing fires removed. */
-        Map<Integer, Map<Integer, Double>> graph = new HashMap<>(this.graph);
-        for(Map.Entry<Integer, Boolean> room : fires.entrySet()) {
-            if(room.getValue()){
-                graph.remove(room.getKey());
-
-                /* Remove all paths to the room */
-                for(Map.Entry<Integer, Map<Integer, Double>> targets : graph.entrySet()) {
-                    targets.getValue().remove(room.getKey());
-                }
-            }
-        }
-
-        /* Generate list of rooms containing people. */
-        Vector<Integer> containsPeople = new Vector<>();
+        /* Generate list of rooms containing people and a map to their counts. */
+        Map<Integer, Integer> room2Count = new HashMap<>();
         for(Map.Entry<Integer, Integer> count : counts.entrySet()) {
             if(count.getValue() > 0) {
-                containsPeople.add(count.getKey());
+                room2Count.put(count.getKey(), count.getValue());
             }
         }
 
-        /* Calculate the shortest paths for each room */
-        Double[] dist = Dijkstras(fires);
-        Vector<Vector<Integer>> paths = new Vector<>(containsPeople.size());
-        for(Integer room: containsPeople){
-            paths.add(GetPathToExit(dist, room));
+        /* Maintain the planned capacity for each room. */
+        Map<Integer, Integer> capacities = new HashMap<>(Constants.ROOMS_MAX_OCCUPANCY);
+
+        /* Calculate the shortest paths for each room. */
+        Double[] dist;
+
+        /* Calculate paths until no nodes are left. */
+        Vector<Vector<Integer>> paths = new Vector<>(room2Count.size());
+        Vector<Integer> path;
+        Integer room, bottleneckCapacity, currentCapacity, roomCount, node;
+        while(!room2Count.isEmpty()){
+            room = GetMinKey(room2Count);
+            dist = Dijkstras(fires, capacities);
+            path = GetPathToExit(dist, room);
+            if(path.size() < 2)
+                room2Count.remove(room);
+            else {
+                bottleneckCapacity = GetBottleneck(path, capacities);
+                roomCount = room2Count.get(room);
+                if(bottleneckCapacity > roomCount)
+                    bottleneckCapacity = roomCount;
+                /* Update path capacities */
+                for (int i = 1; i < path.size() - 1; i++) {
+                    node = path.get(i);
+                    currentCapacity = capacities.get(node);
+                    capacities.remove(node);
+                    capacities.put(node, currentCapacity - bottleneckCapacity);
+                }
+                /* Update room2Count */
+                room2Count.remove(room);
+                room2Count.put(room, roomCount - bottleneckCapacity);
+                if(room2Count.get(room) == 0)
+                    room2Count.remove(room);
+            }
+
+            paths.add(path);
         }
 
+        /* Map the edges in the graph to a physical map identified by indices in ROOMS_EDGE_TO_INDEX. */
         Map<Integer, Boolean> edges = new HashMap<>();
-        for(int i = 0; i < Constants.ROOMS_EDGE_TO_INDEX.size(); i++) {
-            edges.put(i, false);
-        }
-
+        for(int i = 0; i < Constants.ROOMS_EDGE_TO_INDEX.size(); i++) {edges.put(i, false);}
         String edge;
-        for(Vector<Integer> path : paths) {
-            for(int i = 0; i < path.size() - 1; i++) {
-                edge = "" + path.get(i) + " " + path.get(i+1);
+        for(Vector<Integer> path_ : paths) {
+            for(int i = 0; i < path_.size() - 1; i++) {
+                edge = "" + path_.get(i) + " " + path_.get(i+1);
                 edges.put(Constants.ROOMS_EDGE_TO_INDEX.get(edge), true);
             }
         }
@@ -87,7 +103,29 @@ public class Router {
         return edges;
     }
 
-    private Double[] Dijkstras(Map<Integer, Boolean> fires) {
+    private Integer GetBottleneck(Vector<Integer> path, Map<Integer, Integer> capacities) {
+        Integer minimum = Integer.MAX_VALUE;
+        for(int i = 1; i < path.size() - 1; i++){
+            if(capacities.get(path.get(i)) < minimum){
+                minimum = capacities.get(path.get(i));
+            }
+        }
+        return minimum;
+    }
+
+    private Integer GetMinKey(Map<Integer, Integer> room2Count) {
+        Integer room = null;
+        Integer min_value = Integer.MAX_VALUE;
+        for(Map.Entry<Integer, Integer> roomCount: room2Count.entrySet()){
+            if(roomCount.getValue() < min_value){
+                min_value = roomCount.getValue();
+                room = roomCount.getKey();
+            }
+        }
+        return room;
+    }
+
+    private Double[] Dijkstras(Map<Integer, Boolean> fires, Map<Integer, Integer> capacities) {
         /* Set all values to infinity */
         Double[] dist = new Double[this.graph.size()];
         for(int j = 0; j < this.graph.size(); j++) {
@@ -116,6 +154,9 @@ public class Router {
                     if(fires.get(node.getKey())){
                         continue;
                     }
+                }
+                if(nextNode != Constants.ROOM_COUNT && capacities.get(nextNode) == 0){
+                    continue;
                 }
                 if(next_dist < dist[nextNode])
                     dist[nextNode] = next_dist;
