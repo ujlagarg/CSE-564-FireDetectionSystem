@@ -7,17 +7,8 @@ detection of a fire, it calculates the safest paths for persons
 in the building, and guides them using alarms and LEDs. 
 
 ## 2. Installation and Execution
-### 2.1 Command-line Execution
-1. Download the JAR file for `com.fasterxml.jackson.core` [here](https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.13.2.2/jar).
-2. To compile the repository, run the following command:
-```shell
-javac -classpath PATH_TO_JAR src/Main.java
-```
-3. For execution:
-```shell
-java -classpath PATH_TO_JAR src.Main
-```
-### 2.2 IntelliJ IDEA
+Execution requires Intellij IDEA.
+
 - Navigate to `[File | Project Structure]` > 
 `[Project Settings | Libraries]`.
 - Go to `+ | From Maven`.
